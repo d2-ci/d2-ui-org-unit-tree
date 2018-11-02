@@ -15,7 +15,7 @@ import StopIcon from '@material-ui/icons/Stop';
 import ModelBase from 'd2/model/Model';
 import ModelCollection from 'd2/model/ModelCollection';
 
-import { TreeView } from '@dhis2/d2-ui-core';
+import TreeView from '@dhis2/d2-ui-core/build/es/tree-view/TreeView.component';
 
 var styles = {
     progress: {

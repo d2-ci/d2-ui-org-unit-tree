@@ -64,7 +64,9 @@ var _ModelCollection = require('d2/model/ModelCollection');
 
 var _ModelCollection2 = _interopRequireDefault(_ModelCollection);
 
-var _d2UiCore = require('@dhis2/d2-ui-core');
+var _TreeView = require('@dhis2/d2-ui-core/build/es/tree-view/TreeView.component');
+
+var _TreeView2 = _interopRequireDefault(_TreeView);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -369,7 +371,7 @@ var OrgUnitTree = function (_React$Component) {
 
             if (hasChildren) {
                 return _react2.default.createElement(
-                    _d2UiCore.TreeView,
+                    _TreeView2.default,
                     {
                         label: label,
                         onExpand: this.onExpand,
