@@ -1,6 +1,5 @@
 {
   "name": "@dhis2/d2-ui-org-unit-tree",
-  "version": "5.0.1",
   "description": "Org Unit Tree component for d2-ui",
   "main": "./index.js",
   "module": "./index.js",
@@ -39,5 +38,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "version": "5.0.1"
 }
