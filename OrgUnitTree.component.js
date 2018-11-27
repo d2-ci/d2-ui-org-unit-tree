@@ -1,5 +1,6 @@
 import _Object$assign from 'babel-runtime/core-js/object/assign';
 import _extends from 'babel-runtime/helpers/extends';
+import _Promise from 'babel-runtime/core-js/promise';
 import _Object$getPrototypeOf from 'babel-runtime/core-js/object/get-prototype-of';
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _createClass from 'babel-runtime/helpers/createClass';
@@ -159,16 +160,23 @@ var OrgUnitTree = function (_React$Component) {
         value: function loadChildren() {
             var _this3 = this;
 
-            if (this.state.children === undefined && !this.state.loading || this.props.idsThatShouldBeReloaded.indexOf(this.props.root.id) >= 0) {
-                this.setState({ loading: true });
+            return new _Promise(function (resolve) {
+                if (_this3.state.children === undefined && !_this3.state.loading || _this3.props.idsThatShouldBeReloaded.indexOf(_this3.props.root.id) >= 0) {
+                    _this3.setState({ loading: true });
 
-                var root = this.props.root;
-                // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
-                // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
-                root.children.load({ fields: 'id,displayName,children::isNotEmpty,path,parent' }, this.props.forceReloadChildren).then(function (children) {
-                    _this3.setChildState(children);
-                });
-            }
+                    var root = _this3.props.root;
+                    // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
+                    // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
+                    root.children.load({ fields: 'id,displayName,children::isNotEmpty,path,parent' }, _this3.props.forceReloadChildren).then(function (children) {
+                        resolve(children);
+                        _this3.setChildState(children);
+                    });
+                }
+
+                if (_this3.state.children !== undefined) {
+                    resolve(_this3.state.children);
+                }
+            });
         }
     }, {
         key: 'handleSelectClick',
@@ -202,6 +210,7 @@ var OrgUnitTree = function (_React$Component) {
                     selected: this.props.selected,
                     initiallyExpanded: expandedProp,
                     onSelectClick: this.props.onSelectClick,
+                    onContextMenuClick: this.props.onContextMenuClick,
                     currentRoot: this.props.currentRoot,
                     onChangeCurrentRoot: this.props.onChangeCurrentRoot,
                     labelStyle: _extends({}, this.props.labelStyle, {
@@ -301,11 +310,21 @@ var OrgUnitTree = function (_React$Component) {
                 _this5.props.onChangeCurrentRoot(currentOu);
             };
 
+            var onContextMenuClick = function onContextMenuClick(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (_this5.props.onContextMenuClick !== undefined) {
+                    _this5.props.onContextMenuClick(e, currentOu, hasChildren, _this5.loadChildren);
+                }
+            };
+
             var label = React.createElement(
                 'div',
                 {
                     style: labelStyle,
                     onClick: canBecomeCurrentRoot ? setCurrentRoot : isSelectable ? this.handleSelectClick : undefined,
+                    onContextMenu: onContextMenuClick,
                     role: 'button',
                     tabIndex: 0
                 },
@@ -320,7 +339,11 @@ var OrgUnitTree = function (_React$Component) {
                 }),
                 this.props.showFolderIcon && hasChildren && (isInitiallyExpanded ? React.createElement(FolderOpenIcon, { style: _extends({}, styles.folderIcon, this.props.labelStyle.folderIcon) }) : React.createElement(FolderIcon, { style: _extends({}, styles.folderIcon, this.props.labelStyle.folderIcon) })),
                 this.props.showFolderIcon && !hasChildren && React.createElement(StopIcon, { style: _extends({}, styles.stopIcon, this.props.labelStyle.stopIcon) }),
-                currentOu.displayName,
+                React.createElement(
+                    'span',
+                    { style: this.props.labelStyle.text },
+                    currentOu.displayName
+                ),
                 hasChildren && !this.props.hideMemberCount && !!memberCount && React.createElement(
                     'span',
                     { style: styles.memberCount },
@@ -508,13 +531,19 @@ OrgUnitTree.propTypes = {
     /**
      * Prop indicating checkbox color
      */
-    checkboxColor: PropTypes.string
+    checkboxColor: PropTypes.string,
+
+    /**
+     * Prop function invoked when user opens context menu against org unit
+     */
+    onContextMenuClick: PropTypes.func
 };
 
 OrgUnitTree.defaultProps = {
     selected: [],
     initiallyExpanded: [],
     onSelectClick: undefined,
+    onContextMenuClick: undefined,
     onExpand: undefined,
     onCollapse: undefined,
     onChangeCurrentRoot: undefined,
