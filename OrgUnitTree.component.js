@@ -167,7 +167,9 @@ var OrgUnitTree = function (_React$Component) {
                     var root = _this3.props.root;
                     // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
                     // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
-                    root.children.load({ fields: 'id,displayName,children::isNotEmpty,path,parent' }, _this3.props.forceReloadChildren).then(function (children) {
+                    root.children.load({
+                        fields: ['id', _this3.props.displayNameProperty + '~rename(displayName)', 'children::isNotEmpty', 'path', 'parent'].join(',')
+                    }, _this3.props.forceReloadChildren).then(function (children) {
                         resolve(children);
                         _this3.setChildState(children);
                     });
@@ -230,7 +232,8 @@ var OrgUnitTree = function (_React$Component) {
                     forceReloadChildren: this.props.forceReloadChildren,
                     showFolderIcon: this.props.showFolderIcon,
                     disableSpacer: this.props.disableSpacer,
-                    checkboxColor: this.props.checkboxColor
+                    checkboxColor: this.props.checkboxColor,
+                    displayNameProperty: this.props.displayNameProperty
                 });
             }
             return null;
@@ -407,6 +410,11 @@ OrgUnitTree.propTypes = {
     root: PropTypes.instanceOf(ModelBase).isRequired,
 
     /**
+     * Display name property
+     */
+    displayNameProperty: PropTypes.string,
+
+    /**
      * An array of paths of selected OUs
      *
      * The path of an OU is the UIDs of the OU and all its parent OUs separated by slashes (/)
@@ -540,6 +548,7 @@ OrgUnitTree.propTypes = {
 };
 
 OrgUnitTree.defaultProps = {
+    displayNameProperty: 'displayName',
     selected: [],
     initiallyExpanded: [],
     onSelectClick: undefined,
