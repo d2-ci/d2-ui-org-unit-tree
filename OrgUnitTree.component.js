@@ -1,6 +1,6 @@
-import _Object$assign from 'babel-runtime/core-js/object/assign';
 import _extends from 'babel-runtime/helpers/extends';
-import _Promise from 'babel-runtime/core-js/promise';
+import _regeneratorRuntime from 'babel-runtime/regenerator';
+import _asyncToGenerator from 'babel-runtime/helpers/asyncToGenerator';
 import _Object$getPrototypeOf from 'babel-runtime/core-js/object/get-prototype-of';
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
 import _createClass from 'babel-runtime/helpers/createClass';
@@ -9,72 +9,23 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import React from 'react';
 import PropTypes from 'prop-types';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import FolderIcon from '@material-ui/icons/Folder';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import StopIcon from '@material-ui/icons/Stop';
 
 import ModelBase from 'd2/model/Model';
 import ModelCollection from 'd2/model/ModelCollection';
 
 import TreeView from '@dhis2/d2-ui-core/tree-view/TreeView.component';
-
-var styles = {
-    progress: {
-        position: 'absolute',
-        display: 'inline-block',
-        width: '100%',
-        left: -8
-    },
-    progressBar: {
-        height: 2,
-        backgroundColor: 'transparent'
-    },
-    spacer: {
-        position: 'relative',
-        display: 'inline-block',
-        width: '1.2rem',
-        height: '1rem'
-    },
-    label: {
-        display: 'inline-block',
-        outline: 'none'
-    },
-    ouContainer: {
-        borderColor: 'transparent',
-        borderStyle: 'solid',
-        borderWidth: '1px',
-        borderRightWidth: 0,
-        borderRadius: '3px 0 0 3px',
-        background: 'transparent',
-        paddingLeft: 2,
-        outline: 'none'
-    },
-    currentOuContainer: {
-        background: 'rgba(0,0,0,0.05)',
-        borderColor: 'rgba(0,0,0,0.1)'
-    },
-    memberCount: {
-        fontSize: '0.75rem',
-        marginLeft: 4
-    },
-    checkbox: {
-        position: 'relative',
-        bottom: 2,
-        padding: 0
-    },
-    uncheckedCheckbox: {
-        fontSize: 15,
-        color: '#E0E0E0'
-    }
-};
+import styles from './styles/OrgUnitTree.component.styles';
+import OUFolderIconComponent from './OUFolderIcon.component';
+import OUCheckboxComponent from './OUCheckbox.component';
+import { loadChildren } from './utils';
 
 var OrgUnitTree = function (_React$Component) {
     _inherits(OrgUnitTree, _React$Component);
 
     function OrgUnitTree(props) {
+        var _this2 = this;
+
         _classCallCheck(this, OrgUnitTree);
 
         var _this = _possibleConstructorReturn(this, (OrgUnitTree.__proto__ || _Object$getPrototypeOf(OrgUnitTree)).call(this, props));
@@ -93,6 +44,104 @@ var OrgUnitTree = function (_React$Component) {
             }
         };
 
+        _this.onContextMenuClick = function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (_this.props.onContextMenuClick !== undefined) {
+                _this.props.onContextMenuClick(e, _this.props.root, _this.hasChildren(), _this.loadChildren);
+            }
+        };
+
+        _this.setChildState = function (children) {
+            var data = children;
+
+            if (_this.props.onChildrenLoaded) {
+                _this.props.onChildrenLoaded(children);
+            }
+
+            if (!Array.isArray(children)) {
+                data = children.toArray();
+            }
+
+            _this.setState({
+                children: data.sort(function (a, b) {
+                    return a.displayName.localeCompare(b.displayName);
+                }),
+                loading: false
+            });
+        };
+
+        _this.hideChildren = function () {
+            _this.setChildState([]);
+        };
+
+        _this.loadChildren = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+            var children;
+            return _regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            if (!(_this.state.children !== undefined)) {
+                                _context.next = 2;
+                                break;
+                            }
+
+                            return _context.abrupt('return', _this.state.children);
+
+                        case 2:
+                            if (!(_this.state.children === undefined && !_this.state.loading || _this.props.idsThatShouldBeReloaded.indexOf(_this.props.root.id) >= 0)) {
+                                _context.next = 9;
+                                break;
+                            }
+
+                            _this.setState({ loading: true });
+
+                            _context.next = 6;
+                            return loadChildren(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren);
+
+                        case 6:
+                            children = _context.sent;
+
+
+                            _this.setChildState(children);
+
+                            return _context.abrupt('return', children);
+
+                        case 9:
+                        case 'end':
+                            return _context.stop();
+                    }
+                }
+            }, _callee, _this2);
+        }));
+
+        _this.handleSelectClick = function (e) {
+            if (_this.props.onSelectClick) {
+                _this.props.onSelectClick(e, _this.props.root);
+            }
+            e.stopPropagation();
+        };
+
+        _this.hasChildren = function () {
+            return _this.state.children === undefined || Array.isArray(_this.state.children) && _this.state.children.length > 0;
+        };
+
+        _this.shouldIncludeOrgUnit = function (orgUnit) {
+            if (!_this.props.orgUnitsPathsToInclude || _this.props.orgUnitsPathsToInclude.length === 0) {
+                return true;
+            }
+            return !!_this.props.orgUnitsPathsToInclude.some(function (ou) {
+                return ou.includes('/' + orgUnit.id);
+            });
+        };
+
+        _this.setCurrentRoot = function (e) {
+            e.stopPropagation();
+
+            _this.props.onChangeCurrentRoot(_this.props.root);
+        };
+
         _this.state = {
             children: props.root.children === false || Array.isArray(props.root.children) && props.root.children.length === 0 ? [] : undefined,
             loading: false
@@ -104,19 +153,16 @@ var OrgUnitTree = function (_React$Component) {
                 return a.displayName.localeCompare(b.displayName);
             });
         }
-
-        _this.loadChildren = _this.loadChildren.bind(_this);
-        _this.handleSelectClick = _this.handleSelectClick.bind(_this);
         return _this;
     }
 
     _createClass(OrgUnitTree, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
+            var _this3 = this;
 
             if (this.props.initiallyExpanded.some(function (ou) {
-                return ou.includes('/' + _this2.props.root.id);
+                return ou.includes('/' + _this3.props.root.id);
             })) {
                 this.loadChildren();
             }
@@ -131,112 +177,45 @@ var OrgUnitTree = function (_React$Component) {
             }
         }
     }, {
-        key: 'setChildState',
-        value: function setChildState(children) {
-            var data = children;
-
-            if (this.props.onChildrenLoaded) {
-                this.props.onChildrenLoaded(children);
-            }
-
-            if (!Array.isArray(children)) {
-                data = children.toArray();
-            }
-
-            this.setState({
-                children: data.sort(function (a, b) {
-                    return a.displayName.localeCompare(b.displayName);
-                }),
-                loading: false
-            });
-        }
-    }, {
-        key: 'hideChildren',
-        value: function hideChildren() {
-            this.setChildState([]);
-        }
-    }, {
-        key: 'loadChildren',
-        value: function loadChildren() {
-            var _this3 = this;
-
-            return new _Promise(function (resolve) {
-                if (_this3.state.children === undefined && !_this3.state.loading || _this3.props.idsThatShouldBeReloaded.indexOf(_this3.props.root.id) >= 0) {
-                    _this3.setState({ loading: true });
-
-                    var root = _this3.props.root;
-                    // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
-                    // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
-                    root.children.load({
-                        fields: ['id', _this3.props.displayNameProperty + '~rename(displayName)', 'children::isNotEmpty', 'path', 'parent'].join(',')
-                    }, _this3.props.forceReloadChildren).then(function (children) {
-                        resolve(children);
-                        _this3.setChildState(children);
-                    });
-                }
-
-                if (_this3.state.children !== undefined) {
-                    resolve(_this3.state.children);
-                }
-            });
-        }
-    }, {
-        key: 'handleSelectClick',
-        value: function handleSelectClick(e) {
-            if (this.props.onSelectClick) {
-                this.props.onSelectClick(e, this.props.root);
-            }
-            e.stopPropagation();
-        }
-    }, {
-        key: 'shouldIncludeOrgUnit',
-        value: function shouldIncludeOrgUnit(orgUnit) {
-            if (!this.props.orgUnitsPathsToInclude || this.props.orgUnitsPathsToInclude.length === 0) {
-                return true;
-            }
-            return !!this.props.orgUnitsPathsToInclude.some(function (ou) {
-                return ou.includes('/' + orgUnit.id);
-            });
-        }
-    }, {
         key: 'renderChild',
         value: function renderChild(orgUnit, expandedProp) {
-            if (this.shouldIncludeOrgUnit(orgUnit)) {
-                var highlighted = this.props.searchResults.includes(orgUnit.path) && this.props.highlightSearchResults;
-
-                return React.createElement(OrgUnitTree, {
-                    key: orgUnit.id,
-                    root: orgUnit,
-                    onExpand: this.onExpand,
-                    onCollapse: this.onCollapse,
-                    selected: this.props.selected,
-                    initiallyExpanded: expandedProp,
-                    onSelectClick: this.props.onSelectClick,
-                    onContextMenuClick: this.props.onContextMenuClick,
-                    currentRoot: this.props.currentRoot,
-                    onChangeCurrentRoot: this.props.onChangeCurrentRoot,
-                    labelStyle: _extends({}, this.props.labelStyle, {
-                        fontWeight: highlighted ? 500 : this.props.labelStyle.fontWeight,
-                        color: highlighted ? 'orange' : 'inherit'
-                    }),
-                    selectedLabelStyle: this.props.selectedLabelStyle,
-                    arrowSymbol: this.props.arrowSymbol,
-                    idsThatShouldBeReloaded: this.props.idsThatShouldBeReloaded,
-                    hideCheckboxes: this.props.hideCheckboxes,
-                    onChildrenLoaded: this.props.onChildrenLoaded,
-                    hideMemberCount: this.props.hideMemberCount,
-                    orgUnitsPathsToInclude: this.props.orgUnitsPathsToInclude,
-                    treeStyle: this.props.treeStyle,
-                    searchResults: this.props.searchResults,
-                    highlightSearchResults: this.props.highlightSearchResults,
-                    forceReloadChildren: this.props.forceReloadChildren,
-                    showFolderIcon: this.props.showFolderIcon,
-                    disableSpacer: this.props.disableSpacer,
-                    checkboxColor: this.props.checkboxColor,
-                    displayNameProperty: this.props.displayNameProperty
-                });
+            if (!this.shouldIncludeOrgUnit(orgUnit)) {
+                return null;
             }
-            return null;
+
+            var highlighted = this.props.searchResults.includes(orgUnit.path) && this.props.highlightSearchResults;
+
+            return React.createElement(OrgUnitTree, {
+                key: orgUnit.id,
+                root: orgUnit,
+                onExpand: this.onExpand,
+                onCollapse: this.onCollapse,
+                selected: this.props.selected,
+                initiallyExpanded: expandedProp,
+                onSelectClick: this.props.onSelectClick,
+                onContextMenuClick: this.props.onContextMenuClick,
+                currentRoot: this.props.currentRoot,
+                onChangeCurrentRoot: this.props.onChangeCurrentRoot,
+                labelStyle: _extends({}, this.props.labelStyle, {
+                    fontWeight: highlighted ? 500 : this.props.labelStyle.fontWeight,
+                    color: highlighted ? 'orange' : 'inherit'
+                }),
+                selectedLabelStyle: this.props.selectedLabelStyle,
+                arrowSymbol: this.props.arrowSymbol,
+                idsThatShouldBeReloaded: this.props.idsThatShouldBeReloaded,
+                hideCheckboxes: this.props.hideCheckboxes,
+                onChildrenLoaded: this.props.onChildrenLoaded,
+                hideMemberCount: this.props.hideMemberCount,
+                orgUnitsPathsToInclude: this.props.orgUnitsPathsToInclude,
+                treeStyle: this.props.treeStyle,
+                searchResults: this.props.searchResults,
+                highlightSearchResults: this.props.highlightSearchResults,
+                forceReloadChildren: this.props.forceReloadChildren,
+                showFolderIcon: this.props.showFolderIcon,
+                disableSpacer: this.props.disableSpacer,
+                checkboxColor: this.props.checkboxColor,
+                displayNameProperty: this.props.displayNameProperty
+            });
         }
     }, {
         key: 'renderChildren',
@@ -266,81 +245,33 @@ var OrgUnitTree = function (_React$Component) {
             return null;
         }
     }, {
-        key: 'render',
-        value: function render() {
-            var _this5 = this;
-
-            var currentOu = this.props.root;
-
-            // True if this OU has children = is not a leaf node
-            var hasChildren = this.state.children === undefined || Array.isArray(this.state.children) && this.state.children.length > 0;
-            // True if a click handler exists
-            var isSelectable = !!this.props.onSelectClick;
-            var pathRegEx = new RegExp('/' + currentOu.id + '$');
-            var memberRegEx = new RegExp('/' + currentOu.id);
-            var isSelected = this.props.selected && this.props.selected.some(function (ou) {
-                return pathRegEx.test(ou);
-            });
-            // True if this OU is the current root
-            var isCurrentRoot = this.props.currentRoot && this.props.currentRoot.id === currentOu.id;
-            // True if this OU should be expanded by default
-            var isInitiallyExpanded = this.props.initiallyExpanded.some(function (ou) {
-                return ou.includes('/' + currentOu.id);
-            });
-            // True if this OU can BECOME the current root, which means that:
-            // 1) there is a change root handler
-            // 2) this OU is not already the current root
-            // 3) this OU has children (is not a leaf node)
-            var canBecomeCurrentRoot = this.props.onChangeCurrentRoot && !isCurrentRoot && hasChildren;
-
-            var memberCount = this.props.selected !== undefined ? this.props.selected.filter(function (ou) {
-                return memberRegEx.test(ou);
-            }).length : currentOu.memberCount;
-
-            // Hard coded styles for OU name labels - can be overridden with the selectedLabelStyle and labelStyle props
-            var labelStyle = _Object$assign({}, styles.label, {
+        key: 'renderLabel',
+        value: function renderLabel(isSelected, isSelectable, isInitiallyExpanded, canBecomeCurrentRoot, currentOu, hasChildren, memberCount) {
+            var labelStyle = _extends({}, styles.label, {
                 fontWeight: isSelected ? 500 : 300,
                 color: isSelected ? 'orange' : 'inherit',
                 cursor: canBecomeCurrentRoot ? 'pointer' : 'default'
             }, isSelected ? this.props.selectedLabelStyle : this.props.labelStyle);
 
-            // Styles for this OU and OUs contained within it
-            var ouContainerStyle = _Object$assign({}, styles.ouContainer, isCurrentRoot ? styles.currentOuContainer : {}, this.props.treeStyle);
-
-            // Wrap the change root click handler in order to stop event propagation
-            var setCurrentRoot = function setCurrentRoot(e) {
-                e.stopPropagation();
-                _this5.props.onChangeCurrentRoot(currentOu);
-            };
-
-            var onContextMenuClick = function onContextMenuClick(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (_this5.props.onContextMenuClick !== undefined) {
-                    _this5.props.onContextMenuClick(e, currentOu, hasChildren, _this5.loadChildren);
-                }
-            };
-
-            var label = React.createElement(
+            return React.createElement(
                 'div',
                 {
                     style: labelStyle,
-                    onClick: canBecomeCurrentRoot ? setCurrentRoot : isSelectable ? this.handleSelectClick : undefined,
-                    onContextMenu: onContextMenuClick,
+                    onClick: canBecomeCurrentRoot ? this.setCurrentRoot : isSelectable ? this.handleSelectClick : undefined,
+                    onContextMenu: this.onContextMenuClick,
                     role: 'button',
                     tabIndex: 0
                 },
-                isSelectable && !this.props.hideCheckboxes && React.createElement(Checkbox, {
-                    style: styles.checkbox,
+                isSelectable && !this.props.hideCheckboxes && React.createElement(OUCheckboxComponent, {
                     checked: isSelected,
                     disabled: !isSelectable,
                     onClick: this.handleSelectClick,
-                    color: this.props.checkboxColor,
-                    icon: React.createElement(CheckBoxOutlineBlankIcon, { style: styles.uncheckedCheckbox }),
-                    checkedIcon: React.createElement(CheckBoxIcon, { style: { fontSize: 15 } })
+                    color: this.props.checkboxColor
                 }),
-                this.props.showFolderIcon && hasChildren && (isInitiallyExpanded ? React.createElement(FolderOpenIcon, { style: _extends({}, styles.folderIcon, this.props.labelStyle.folderIcon) }) : React.createElement(FolderIcon, { style: _extends({}, styles.folderIcon, this.props.labelStyle.folderIcon) })),
+                this.props.showFolderIcon && hasChildren && React.createElement(OUFolderIconComponent, {
+                    isExpanded: isInitiallyExpanded,
+                    styles: this.props.labelStyle.folderIcon
+                }),
                 this.props.showFolderIcon && !hasChildren && React.createElement(StopIcon, { style: _extends({}, styles.stopIcon, this.props.labelStyle.stopIcon) }),
                 React.createElement(
                     'span',
@@ -355,6 +286,31 @@ var OrgUnitTree = function (_React$Component) {
                     ')'
                 )
             );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var currentOu = this.props.root;
+            var hasChildren = this.hasChildren();
+            var isSelectable = !!this.props.onSelectClick;
+            var pathRegEx = new RegExp('/' + currentOu.id + '$');
+            var memberRegEx = new RegExp('/' + currentOu.id);
+            var isSelected = this.props.selected && this.props.selected.some(function (ou) {
+                return pathRegEx.test(ou);
+            });
+            var isCurrentRoot = this.props.currentRoot && this.props.currentRoot.id === currentOu.id;
+            var isInitiallyExpanded = this.props.initiallyExpanded.some(function (ou) {
+                return ou.includes('/' + currentOu.id);
+            });
+            var canBecomeCurrentRoot = this.props.onChangeCurrentRoot && !isCurrentRoot && hasChildren;
+
+            var memberCount = this.props.selected !== undefined ? this.props.selected.filter(function (ou) {
+                return memberRegEx.test(ou);
+            }).length : currentOu.memberCount;
+
+            var ouContainerStyle = _extends({}, styles.ouContainer, isCurrentRoot ? styles.currentOuContainer : {}, this.props.treeStyle);
+
+            var label = this.renderLabel(isSelected, isSelectable, isInitiallyExpanded, canBecomeCurrentRoot, currentOu, hasChildren, memberCount);
 
             if (hasChildren) {
                 return React.createElement(
