@@ -1,34 +1,94 @@
-import _extends from 'babel-runtime/helpers/extends';
-import _regeneratorRuntime from 'babel-runtime/regenerator';
-import _asyncToGenerator from 'babel-runtime/helpers/asyncToGenerator';
-import _Object$getPrototypeOf from 'babel-runtime/core-js/object/get-prototype-of';
-import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
-import _createClass from 'babel-runtime/helpers/createClass';
-import _possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
-import _inherits from 'babel-runtime/helpers/inherits';
-import React from 'react';
-import PropTypes from 'prop-types';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import StopIcon from '@material-ui/icons/Stop';
+'use strict';
 
-import ModelBase from 'd2/model/Model';
-import ModelCollection from 'd2/model/ModelCollection';
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-import TreeView from '@dhis2/d2-ui-core/tree-view/TreeView.component';
-import styles from './styles/OrgUnitTree.component.styles';
-import OUFolderIconComponent from './OUFolderIcon.component';
-import OUCheckboxComponent from './OUCheckbox.component';
-import { loadChildren } from './utils';
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _LinearProgress = require('@material-ui/core/LinearProgress');
+
+var _LinearProgress2 = _interopRequireDefault(_LinearProgress);
+
+var _Stop = require('@material-ui/icons/Stop');
+
+var _Stop2 = _interopRequireDefault(_Stop);
+
+var _Model = require('d2/model/Model');
+
+var _Model2 = _interopRequireDefault(_Model);
+
+var _ModelCollection = require('d2/model/ModelCollection');
+
+var _ModelCollection2 = _interopRequireDefault(_ModelCollection);
+
+var _TreeView = require('@dhis2/d2-ui-core/tree-view/TreeView.component');
+
+var _TreeView2 = _interopRequireDefault(_TreeView);
+
+var _OrgUnitTreeComponent = require('./styles/OrgUnitTree.component.styles');
+
+var _OrgUnitTreeComponent2 = _interopRequireDefault(_OrgUnitTreeComponent);
+
+var _OUFolderIcon = require('./OUFolderIcon.component');
+
+var _OUFolderIcon2 = _interopRequireDefault(_OUFolderIcon);
+
+var _OUCheckbox = require('./OUCheckbox.component');
+
+var _OUCheckbox2 = _interopRequireDefault(_OUCheckbox);
+
+var _utils = require('./utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var OrgUnitTree = function (_React$Component) {
-    _inherits(OrgUnitTree, _React$Component);
+    (0, _inherits3.default)(OrgUnitTree, _React$Component);
 
     function OrgUnitTree(props) {
         var _this2 = this;
 
-        _classCallCheck(this, OrgUnitTree);
+        (0, _classCallCheck3.default)(this, OrgUnitTree);
 
-        var _this = _possibleConstructorReturn(this, (OrgUnitTree.__proto__ || _Object$getPrototypeOf(OrgUnitTree)).call(this, props));
+        var _this = (0, _possibleConstructorReturn3.default)(this, (OrgUnitTree.__proto__ || (0, _getPrototypeOf2.default)(OrgUnitTree)).call(this, props));
 
         _this.onCollapse = function (orgUnit) {
             if (typeof _this.props.onCollapse === 'function') {
@@ -76,9 +136,9 @@ var OrgUnitTree = function (_React$Component) {
             _this.setChildState([]);
         };
 
-        _this.loadChildren = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+        _this.loadChildren = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
             var children;
-            return _regeneratorRuntime.wrap(function _callee$(_context) {
+            return _regenerator2.default.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
@@ -98,7 +158,7 @@ var OrgUnitTree = function (_React$Component) {
                             _this.setState({ loading: true });
 
                             _context.next = 6;
-                            return loadChildren(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren);
+                            return (0, _utils.loadChildren)(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren);
 
                         case 6:
                             children = _context.sent;
@@ -146,7 +206,7 @@ var OrgUnitTree = function (_React$Component) {
             children: props.root.children === false || Array.isArray(props.root.children) && props.root.children.length === 0 ? [] : undefined,
             loading: false
         };
-        if (props.root.children instanceof ModelCollection && !props.root.children.hasUnloadedData) {
+        if (props.root.children instanceof _ModelCollection2.default && !props.root.children.hasUnloadedData) {
             _this.state.children = props.root.children.toArray()
             // Sort here since the API returns nested children in random order
             .sort(function (a, b) {
@@ -156,7 +216,7 @@ var OrgUnitTree = function (_React$Component) {
         return _this;
     }
 
-    _createClass(OrgUnitTree, [{
+    (0, _createClass3.default)(OrgUnitTree, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this3 = this;
@@ -185,7 +245,7 @@ var OrgUnitTree = function (_React$Component) {
 
             var highlighted = this.props.searchResults.includes(orgUnit.path) && this.props.highlightSearchResults;
 
-            return React.createElement(OrgUnitTree, {
+            return _react2.default.createElement(OrgUnitTree, {
                 key: orgUnit.id,
                 root: orgUnit,
                 onExpand: this.onExpand,
@@ -196,7 +256,7 @@ var OrgUnitTree = function (_React$Component) {
                 onContextMenuClick: this.props.onContextMenuClick,
                 currentRoot: this.props.currentRoot,
                 onChangeCurrentRoot: this.props.onChangeCurrentRoot,
-                labelStyle: _extends({}, this.props.labelStyle, {
+                labelStyle: (0, _extends3.default)({}, this.props.labelStyle, {
                     fontWeight: highlighted ? 500 : this.props.labelStyle.fontWeight,
                     color: highlighted ? 'orange' : 'inherit'
                 }),
@@ -235,10 +295,10 @@ var OrgUnitTree = function (_React$Component) {
             }
 
             if (this.state.loading) {
-                return React.createElement(
+                return _react2.default.createElement(
                     'div',
-                    { style: styles.progress },
-                    React.createElement(LinearProgress, { style: styles.progressBar })
+                    { style: _OrgUnitTreeComponent2.default.progress },
+                    _react2.default.createElement(_LinearProgress2.default, { style: _OrgUnitTreeComponent2.default.progressBar })
                 );
             }
 
@@ -247,13 +307,13 @@ var OrgUnitTree = function (_React$Component) {
     }, {
         key: 'renderLabel',
         value: function renderLabel(isSelected, isSelectable, isInitiallyExpanded, canBecomeCurrentRoot, currentOu, hasChildren, memberCount) {
-            var labelStyle = _extends({}, styles.label, {
+            var labelStyle = (0, _extends3.default)({}, _OrgUnitTreeComponent2.default.label, {
                 fontWeight: isSelected ? 500 : 300,
                 color: isSelected ? 'orange' : 'inherit',
                 cursor: canBecomeCurrentRoot ? 'pointer' : 'default'
             }, isSelected ? this.props.selectedLabelStyle : this.props.labelStyle);
 
-            return React.createElement(
+            return _react2.default.createElement(
                 'div',
                 {
                     style: labelStyle,
@@ -262,25 +322,25 @@ var OrgUnitTree = function (_React$Component) {
                     role: 'button',
                     tabIndex: 0
                 },
-                isSelectable && !this.props.hideCheckboxes && React.createElement(OUCheckboxComponent, {
+                isSelectable && !this.props.hideCheckboxes && _react2.default.createElement(_OUCheckbox2.default, {
                     checked: isSelected,
                     disabled: !isSelectable,
                     onClick: this.handleSelectClick,
                     color: this.props.checkboxColor
                 }),
-                this.props.showFolderIcon && hasChildren && React.createElement(OUFolderIconComponent, {
+                this.props.showFolderIcon && hasChildren && _react2.default.createElement(_OUFolderIcon2.default, {
                     isExpanded: isInitiallyExpanded,
                     styles: this.props.labelStyle.folderIcon
                 }),
-                this.props.showFolderIcon && !hasChildren && React.createElement(StopIcon, { style: _extends({}, styles.stopIcon, this.props.labelStyle.stopIcon) }),
-                React.createElement(
+                this.props.showFolderIcon && !hasChildren && _react2.default.createElement(_Stop2.default, { style: (0, _extends3.default)({}, _OrgUnitTreeComponent2.default.stopIcon, this.props.labelStyle.stopIcon) }),
+                _react2.default.createElement(
                     'span',
                     { style: this.props.labelStyle.text },
                     currentOu.displayName
                 ),
-                hasChildren && !this.props.hideMemberCount && !!memberCount && React.createElement(
+                hasChildren && !this.props.hideMemberCount && !!memberCount && _react2.default.createElement(
                     'span',
-                    { style: styles.memberCount },
+                    { style: _OrgUnitTreeComponent2.default.memberCount },
                     '(',
                     memberCount,
                     ')'
@@ -308,13 +368,13 @@ var OrgUnitTree = function (_React$Component) {
                 return memberRegEx.test(ou);
             }).length : currentOu.memberCount;
 
-            var ouContainerStyle = _extends({}, styles.ouContainer, isCurrentRoot ? styles.currentOuContainer : {}, this.props.treeStyle);
+            var ouContainerStyle = (0, _extends3.default)({}, _OrgUnitTreeComponent2.default.ouContainer, isCurrentRoot ? _OrgUnitTreeComponent2.default.currentOuContainer : {}, this.props.treeStyle);
 
             var label = this.renderLabel(isSelected, isSelectable, isInitiallyExpanded, canBecomeCurrentRoot, currentOu, hasChildren, memberCount);
 
             if (hasChildren) {
-                return React.createElement(
-                    TreeView,
+                return _react2.default.createElement(
+                    _TreeView2.default,
                     {
                         label: label,
                         onExpand: this.onExpand,
@@ -330,7 +390,7 @@ var OrgUnitTree = function (_React$Component) {
                 );
             }
 
-            return React.createElement(
+            return _react2.default.createElement(
                 'div',
                 {
                     onClick: isSelectable ? this.handleSelectClick : undefined,
@@ -339,14 +399,13 @@ var OrgUnitTree = function (_React$Component) {
                     role: 'button',
                     tabIndex: 0
                 },
-                !this.props.disableSpacer && React.createElement('div', { style: styles.spacer }),
+                !this.props.disableSpacer && _react2.default.createElement('div', { style: _OrgUnitTreeComponent2.default.spacer }),
                 label
             );
         }
     }]);
-
     return OrgUnitTree;
-}(React.Component);
+}(_react2.default.Component);
 
 function orgUnitPathPropValidator(propValue, key, compName, location, propFullName) {
     if (!/(\/[a-zA-Z][a-zA-Z0-9]{10})+/.test(propValue[key])) {
@@ -363,47 +422,47 @@ OrgUnitTree.propTypes = {
      * `false` or an empty array. If the children property is undefined, the children will be fetched from
      * the server when the tree is expanded.
      */
-    root: PropTypes.instanceOf(ModelBase).isRequired,
+    root: _propTypes2.default.instanceOf(_Model2.default).isRequired,
 
     /**
      * Display name property
      */
-    displayNameProperty: PropTypes.string,
+    displayNameProperty: _propTypes2.default.string,
 
     /**
      * An array of paths of selected OUs
      *
      * The path of an OU is the UIDs of the OU and all its parent OUs separated by slashes (/)
      */
-    selected: PropTypes.arrayOf(orgUnitPathPropValidator),
+    selected: _propTypes2.default.arrayOf(orgUnitPathPropValidator),
 
     /**
      * An array of OU paths that will be expanded automatically as soon as they are encountered
      *
      * The path of an OU is the UIDs of the OU and all its parent OUs separated by slashes (/)
      */
-    initiallyExpanded: PropTypes.arrayOf(orgUnitPathPropValidator),
+    initiallyExpanded: _propTypes2.default.arrayOf(orgUnitPathPropValidator),
 
     /**
      * onExpand callback is triggered when user expands organisation unit
      *
      * Will receive one argument - OU that was expanded
      */
-    onExpand: PropTypes.func,
+    onExpand: _propTypes2.default.func,
 
     /**
      * onCollapse callback is triggered when user collapses organisation unit
      *
      * Will receive one argument - OU that was collapsed
      */
-    onCollapse: PropTypes.func,
+    onCollapse: _propTypes2.default.func,
 
     /**
      * onSelectClick callback, which is triggered when a click triggers the selection of an organisation unit
      *
      * The onSelectClick callback will receive two arguments: The original click event, and the OU that was clicked
      */
-    onSelectClick: PropTypes.func,
+    onSelectClick: _propTypes2.default.func,
 
     /**
      * onChangeCurrentRoot callback, which is triggered when the change current root label is clicked. Setting this also
@@ -412,95 +471,95 @@ OrgUnitTree.propTypes = {
      * the onChangeCurrentRoot callback will receive two arguments: The original click event, and the organisation unit
      * model object that was selected as the new root
      */
-    onChangeCurrentRoot: PropTypes.func,
+    onChangeCurrentRoot: _propTypes2.default.func,
 
     /**
      * Organisation unit model representing the current root
      */
-    currentRoot: PropTypes.object,
+    currentRoot: _propTypes2.default.object,
 
     /**
      * onChildrenLoaded callback, which is triggered when the children of this root org unit have been loaded
      *
      * The callback receives one argument: A D2 ModelCollection object that contains all the newly loaded org units
      */
-    onChildrenLoaded: PropTypes.func,
+    onChildrenLoaded: _propTypes2.default.func,
 
     /**
      * Custom styling for OU labels
      */
-    labelStyle: PropTypes.object,
+    labelStyle: _propTypes2.default.object,
 
     /**
      * Custom styling for trees
      */
-    treeStyle: PropTypes.object,
+    treeStyle: _propTypes2.default.object,
 
     /**
      * Custom styling for the labels of selected OUs
      */
-    selectedLabelStyle: PropTypes.object,
+    selectedLabelStyle: _propTypes2.default.object,
 
     /**
      * An array of organisation unit IDs that should be reloaded from the API
      */
-    idsThatShouldBeReloaded: PropTypes.arrayOf(PropTypes.string),
+    idsThatShouldBeReloaded: _propTypes2.default.arrayOf(_propTypes2.default.string),
 
     /**
      * Custom arrow symbol
      */
-    arrowSymbol: PropTypes.string,
+    arrowSymbol: _propTypes2.default.string,
 
     /**
      * If true, don't display checkboxes next to org unit labels
      */
-    hideCheckboxes: PropTypes.bool,
+    hideCheckboxes: _propTypes2.default.bool,
 
     /**
      * if true, don't display the selected member count next to org unit labels
      */
-    hideMemberCount: PropTypes.bool,
+    hideMemberCount: _propTypes2.default.bool,
 
     /**
      * Array of paths of Organisation Units to include on tree. If not defined or empty, all children from root to leafs will be shown
      */
-    orgUnitsPathsToInclude: PropTypes.array,
+    orgUnitsPathsToInclude: _propTypes2.default.array,
 
     /**
      * If true `root.children.load` (a method on d2.ModelCollectionProperty) will be called with forceReload set to true, which is required
      * for dynamic OrgUnitTrees, i.e. in cases where parent-child relations are updated
      */
-    forceReloadChildren: PropTypes.bool,
+    forceReloadChildren: _propTypes2.default.bool,
 
     /**
      * Results from search
      */
-    searchResults: PropTypes.array,
+    searchResults: _propTypes2.default.array,
 
     /**
      * Indicates if search results should be highlighted
      */
-    highlightSearchResults: PropTypes.bool,
+    highlightSearchResults: _propTypes2.default.bool,
 
     /**
      * Indicates if showing folder icon is enabled
      */
-    showFolderIcon: PropTypes.bool,
+    showFolderIcon: _propTypes2.default.bool,
 
     /**
      * Prop indicating if spacer should be enabled
      */
-    disableSpacer: PropTypes.bool,
+    disableSpacer: _propTypes2.default.bool,
 
     /**
      * Prop indicating checkbox color
      */
-    checkboxColor: PropTypes.string,
+    checkboxColor: _propTypes2.default.string,
 
     /**
      * Prop function invoked when user opens context menu against org unit
      */
-    onContextMenuClick: PropTypes.func
+    onContextMenuClick: _propTypes2.default.func
 };
 
 OrgUnitTree.defaultProps = {
@@ -530,4 +589,4 @@ OrgUnitTree.defaultProps = {
     checkboxColor: 'primary'
 };
 
-export default OrgUnitTree;
+exports.default = OrgUnitTree;
