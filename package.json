@@ -1,9 +1,9 @@
 {
   "name": "@dhis2/d2-ui-org-unit-tree",
-  "version": "5.0.0",
+  "version": "1.4.0",
   "description": "Org Unit Tree component for d2-ui",
-  "main": "./build/cjs/index.js",
-  "module": "./build/es/index.js",
+  "main": "./cjs/index.js",
+  "module": "./es/index.js",
   "license": "BSD-3-Clause",
   "peerDependencies": {
     "d2": "^31.1.1",
@@ -41,5 +41,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "private": false
 }
