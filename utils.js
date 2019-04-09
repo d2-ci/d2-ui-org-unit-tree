@@ -1,10 +1,15 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 /**
  * Execute an operation for each org unit within a tree along a path
  * @param root
  * @param path
  * @param op A callback that accepts one parameter: An org unit
  */
-export var forEachOnPath = function forEachOnPath(root, path, op) {
+var forEachOnPath = exports.forEachOnPath = function forEachOnPath(root, path, op) {
     op(root);
     if (path.length > 0 && (Array.isArray(root.children) || root.children.size > 0)) {
         if (root.children.has(path[0])) {
@@ -21,7 +26,7 @@ export var forEachOnPath = function forEachOnPath(root, path, op) {
  * @param root
  * @param orgUnit
  */
-export var decrementMemberCount = function decrementMemberCount(root, orgUnit) {
+var decrementMemberCount = exports.decrementMemberCount = function decrementMemberCount(root, orgUnit) {
     forEachOnPath(root, orgUnit.path.substr(1).split('/').slice(1), function (ou) {
         return ou.memberCount--;
     });
@@ -33,7 +38,7 @@ export var decrementMemberCount = function decrementMemberCount(root, orgUnit) {
  * @param root The root org unit
  * @param orgUnit
  */
-export var incrementMemberCount = function incrementMemberCount(root, orgUnit) {
+var incrementMemberCount = exports.incrementMemberCount = function incrementMemberCount(root, orgUnit) {
     forEachOnPath(root, orgUnit.path.substr(1).split('/').slice(1), function (ou) {
         return ou.memberCount++;
     });
@@ -44,7 +49,7 @@ export var incrementMemberCount = function incrementMemberCount(root, orgUnit) {
  * @param root
  * @param children
  */
-export var mergeChildren = function mergeChildren(root, children) {
+var mergeChildren = exports.mergeChildren = function mergeChildren(root, children) {
     function assignChildren(root, path, children) {
         if (path.length === 0) {
             root.children = children;
@@ -66,7 +71,7 @@ export var mergeChildren = function mergeChildren(root, children) {
  * @param forceReloadChildren
  * @returns {*}
  */
-export var loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren) {
+var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren) {
     var fields = ['id', displayNameProperty + '~rename(displayName)', 'children::isNotEmpty', 'path', 'parent'];
 
     // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return

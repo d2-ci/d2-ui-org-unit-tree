@@ -1,16 +1,40 @@
-import _Object$assign from 'babel-runtime/core-js/object/assign';
-import _extends from 'babel-runtime/helpers/extends';
-import React from 'react';
-import PropTypes from 'prop-types';
-import OrgUnitTree from './OrgUnitTree.component';
+'use strict';
 
-export default function OrgUnitTreeMultipleRoots(props) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+exports.default = OrgUnitTreeMultipleRoots;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _OrgUnitTree = require('./OrgUnitTree.component');
+
+var _OrgUnitTree2 = _interopRequireDefault(_OrgUnitTree);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function OrgUnitTreeMultipleRoots(props) {
     if (props.roots) {
-        return React.createElement(
+        return _react2.default.createElement(
             'div',
             null,
             props.roots.map(function (root, index) {
-                return React.createElement(OrgUnitTree, _extends({
+                return _react2.default.createElement(_OrgUnitTree2.default, (0, _extends3.default)({
                     key: index
                 }, props, {
                     root: root,
@@ -21,7 +45,7 @@ export default function OrgUnitTreeMultipleRoots(props) {
     }
 
     var root = props.root;
-    return React.createElement(OrgUnitTree, _extends({ root: root }, props));
+    return _react2.default.createElement(_OrgUnitTree2.default, (0, _extends3.default)({ root: root }, props));
 }
 
 function isOrgUnitModel(obj) {
@@ -40,7 +64,7 @@ function OrgUnitModelArrayElementValidator(propValue, key, componentName, locati
     }
 }
 
-OrgUnitTreeMultipleRoots.propTypes = _Object$assign({}, OrgUnitTree.propTypes, {
+OrgUnitTreeMultipleRoots.propTypes = (0, _assign2.default)({}, _OrgUnitTree2.default.propTypes, {
     root: OrgUnitModelValidator,
-    roots: PropTypes.arrayOf(OrgUnitModelArrayElementValidator)
+    roots: _propTypes2.default.arrayOf(OrgUnitModelArrayElementValidator)
 });
