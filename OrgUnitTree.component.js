@@ -52,14 +52,6 @@ var _Stop = require('@material-ui/icons/Stop');
 
 var _Stop2 = _interopRequireDefault(_Stop);
 
-var _Model = require('d2/model/Model');
-
-var _Model2 = _interopRequireDefault(_Model);
-
-var _ModelCollection = require('d2/model/ModelCollection');
-
-var _ModelCollection2 = _interopRequireDefault(_ModelCollection);
-
 var _TreeView = require('@dhis2/d2-ui-core/tree-view/TreeView.component');
 
 var _TreeView2 = _interopRequireDefault(_TreeView);
@@ -206,7 +198,7 @@ var OrgUnitTree = function (_React$Component) {
             children: props.root.children === false || Array.isArray(props.root.children) && props.root.children.length === 0 ? [] : undefined,
             loading: false
         };
-        if (props.root.children instanceof _ModelCollection2.default && !props.root.children.hasUnloadedData) {
+        if (props.root.children && typeof props.root.children.toArray === 'function' && !props.root.children.hasUnloadedData) {
             _this.state.children = props.root.children.toArray()
             // Sort here since the API returns nested children in random order
             .sort(function (a, b) {
@@ -416,13 +408,13 @@ function orgUnitPathPropValidator(propValue, key, compName, location, propFullNa
 
 OrgUnitTree.propTypes = {
     /**
-     * The root OrganisationUnit of the tree
+     * The root OrganisationUnit of the tree, ModelBase
      *
      * If the root OU is known to have no children, the `children` property of the root OU should be either
      * `false` or an empty array. If the children property is undefined, the children will be fetched from
      * the server when the tree is expanded.
      */
-    root: _propTypes2.default.instanceOf(_Model2.default).isRequired,
+    root: _propTypes2.default.object.isRequired,
 
     /**
      * Display name property
