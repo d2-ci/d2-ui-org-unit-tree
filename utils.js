@@ -72,7 +72,7 @@ var mergeChildren = exports.mergeChildren = function mergeChildren(root, childre
  * @returns {*}
  */
 var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren) {
-    var fields = ['id', displayNameProperty + '~rename(displayName)', 'children::isNotEmpty', 'path', 'parent'];
+    var fields = ['id', displayNameProperty + '~rename(displayName)', 'code', 'children::isNotEmpty', 'path', 'parent'];
 
     // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
     // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
