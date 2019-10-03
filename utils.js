@@ -71,14 +71,14 @@ var mergeChildren = exports.mergeChildren = function mergeChildren(root, childre
  * @param forceReloadChildren
  * @returns {*}
  */
-var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren, useUserDataViewFallback) {
+var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren, isUserDataViewFallback) {
     var fields = ['id', displayNameProperty + '~rename(displayName)', 'code', 'children::isNotEmpty', 'path', 'parent'];
 
     var options = {
         fields: fields.join(',')
     };
 
-    if (useUserDataViewFallback) {
+    if (isUserDataViewFallback) {
         options.userDataViewFallback = true;
     }
 

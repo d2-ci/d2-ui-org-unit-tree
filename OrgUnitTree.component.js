@@ -150,7 +150,7 @@ var OrgUnitTree = function (_React$Component) {
                             _this.setState({ loading: true });
 
                             _context.next = 6;
-                            return (0, _utils.loadChildren)(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren, _this.props.useUserDataViewFallback);
+                            return (0, _utils.loadChildren)(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren, _this.props.isUserDataViewFallback);
 
                         case 6:
                             children = _context.sent;
@@ -266,7 +266,8 @@ var OrgUnitTree = function (_React$Component) {
                 showFolderIcon: this.props.showFolderIcon,
                 disableSpacer: this.props.disableSpacer,
                 checkboxColor: this.props.checkboxColor,
-                displayNameProperty: this.props.displayNameProperty
+                displayNameProperty: this.props.displayNameProperty,
+                isUserDataViewFallback: this.props.isUserDataViewFallback
             });
         }
     }, {
@@ -558,7 +559,7 @@ OrgUnitTree.propTypes = {
     /**
      * Indicates the userDataViewFallback parameter must be used in the requests made when expanding the tree
      */
-    useUserDataViewFallback: _propTypes2.default.bool
+    isUserDataViewFallback: _propTypes2.default.bool
 };
 
 OrgUnitTree.defaultProps = {
@@ -586,7 +587,7 @@ OrgUnitTree.defaultProps = {
     showFolderIcon: false,
     disableSpacer: false,
     checkboxColor: 'primary',
-    useUserDataViewFallback: false
+    isUserDataViewFallback: false
 };
 
 exports.default = OrgUnitTree;
