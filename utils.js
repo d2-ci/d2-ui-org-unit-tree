@@ -71,10 +71,18 @@ var mergeChildren = exports.mergeChildren = function mergeChildren(root, childre
  * @param forceReloadChildren
  * @returns {*}
  */
-var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren) {
+var loadChildren = exports.loadChildren = function loadChildren(root, displayNameProperty, forceReloadChildren, useUserDataViewFallback) {
     var fields = ['id', displayNameProperty + '~rename(displayName)', 'code', 'children::isNotEmpty', 'path', 'parent'];
+
+    var options = {
+        fields: fields.join(',')
+    };
+
+    if (useUserDataViewFallback) {
+        options.userDataViewFallback = true;
+    }
 
     // d2.ModelCollectionProperty.load takes a second parameter `forceReload` and will just return
     // the current valueMap unless either `this.hasUnloadedData` or `forceReload` are true
-    return root.children.load({ fields: fields.join(',') }, forceReloadChildren);
+    return root.children.load(options, forceReloadChildren);
 };
