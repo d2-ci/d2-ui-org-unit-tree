@@ -150,7 +150,7 @@ var OrgUnitTree = function (_React$Component) {
                             _this.setState({ loading: true });
 
                             _context.next = 6;
-                            return (0, _utils.loadChildren)(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren);
+                            return (0, _utils.loadChildren)(_this.props.root, _this.props.displayNameProperty, _this.props.forceReloadChildren, _this.props.isUserDataViewFallback);
 
                         case 6:
                             children = _context.sent;
@@ -266,7 +266,8 @@ var OrgUnitTree = function (_React$Component) {
                 showFolderIcon: this.props.showFolderIcon,
                 disableSpacer: this.props.disableSpacer,
                 checkboxColor: this.props.checkboxColor,
-                displayNameProperty: this.props.displayNameProperty
+                displayNameProperty: this.props.displayNameProperty,
+                isUserDataViewFallback: this.props.isUserDataViewFallback
             });
         }
     }, {
@@ -324,7 +325,9 @@ var OrgUnitTree = function (_React$Component) {
                     isExpanded: isInitiallyExpanded,
                     styles: this.props.labelStyle.folderIcon
                 }),
-                this.props.showFolderIcon && !hasChildren && _react2.default.createElement(_Stop2.default, { style: (0, _extends3.default)({}, _OrgUnitTreeComponent2.default.stopIcon, this.props.labelStyle.stopIcon) }),
+                this.props.showFolderIcon && !hasChildren && _react2.default.createElement(_Stop2.default, {
+                    style: (0, _extends3.default)({}, _OrgUnitTreeComponent2.default.stopIcon, this.props.labelStyle.stopIcon)
+                }),
                 _react2.default.createElement(
                     'span',
                     { style: this.props.labelStyle.text },
@@ -551,7 +554,12 @@ OrgUnitTree.propTypes = {
     /**
      * Prop function invoked when user opens context menu against org unit
      */
-    onContextMenuClick: _propTypes2.default.func
+    onContextMenuClick: _propTypes2.default.func,
+
+    /**
+     * Indicates the userDataViewFallback parameter must be used in the requests made when expanding the tree
+     */
+    isUserDataViewFallback: _propTypes2.default.bool
 };
 
 OrgUnitTree.defaultProps = {
@@ -578,7 +586,8 @@ OrgUnitTree.defaultProps = {
     highlightSearchResults: false,
     showFolderIcon: false,
     disableSpacer: false,
-    checkboxColor: 'primary'
+    checkboxColor: 'primary',
+    isUserDataViewFallback: false
 };
 
 exports.default = OrgUnitTree;
